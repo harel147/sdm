@@ -18,8 +18,7 @@ def main():
     t_values = np.linspace(0, 1.0, f)
 
     # select best t along geodesic using leave-1-out on train set
-    #best_t = leave_1_out_sdm_select_optimal_t(train_data, train_labels, t_values, n_components, dataset_type='classification')
-    best_t = 0.5
+    best_t = leave_1_out_sdm_select_optimal_t(train_data, train_labels, t_values, n_components, dataset_type='classification')
 
     # evaluate SDM with selected t on test set
     model = SDM(n_components=n_components, labels_type='classification')
