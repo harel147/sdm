@@ -1,6 +1,5 @@
 import numpy as np
-
-from sklearn.neighbors import KNeighborsClassifier, KNeighborsRegressor
+from sklearn.neighbors import KNeighborsRegressor
 from sklearn.metrics import mean_squared_error
 
 from supervised_diffusion_maps.sdm import SDM

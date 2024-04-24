@@ -154,22 +154,10 @@ class MyDiffusionMaps:
 
         max_count = max(list(eps_candidates_count.values()))
         best_count_eps = [eps for eps, count in eps_candidates_count.items() if count >= max_count]
-        best_p_value = 0
-        best_eps = None
-        for eps, eigenvalues in eps_candidates_eigenvalues.items():
-            if eps not in best_count_eps:
-                continue
-            valid_eigenvalues = eigenvalues[(lower_bound <= eigenvalues) & (eigenvalues <= upper_bound)]
-            uniform_dist = np.random.uniform(0, 1, size=len(valid_eigenvalues))
-            # Perform the Kolmogorov-Smirnov test
-            ks_statistic, p_value = kstest(valid_eigenvalues, uniform_dist)
-            if p_value > best_p_value:
-                best_p_value = p_value
-                best_eps = eps
-
-        if best_eps is None:
+        if len(best_count_eps) == 0:
             raise RuntimeError(f"Failed to select eps automatically.")
 
+        best_eps = np.median(best_count_eps)
         print(f"selected eps: {best_eps}")
         return best_eps
 
