@@ -3,13 +3,14 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import accuracy_score
 
 from supervised_diffusion_maps.sdm import SDM
-from sdm_example.datasets_loaders import load_ionosphere
+from sdm_example.datasets_loaders import load_ionosphere, load_iris_dataset
 from sdm_example.tools import leave_1_out_sdm_select_optimal_t, plot_2d_visualization
 
 
 def main():
     # load dataset
     train_data, test_data, train_labels, test_labels = load_ionosphere()
+    #train_data, test_data, train_labels, test_labels = load_iris_dataset()
 
     # set parameters
     n_components = 2
@@ -17,7 +18,8 @@ def main():
     t_values = np.linspace(0, 1.0, f)
 
     # select best t along geodesic using leave-1-out on train set
-    best_t = leave_1_out_sdm_select_optimal_t(train_data, train_labels, t_values, n_components, dataset_type='classification')
+    #best_t = leave_1_out_sdm_select_optimal_t(train_data, train_labels, t_values, n_components, dataset_type='classification')
+    best_t = 0.5
 
     # evaluate SDM with selected t on test set
     model = SDM(n_components=n_components, labels_type='classification')
