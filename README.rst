@@ -7,7 +7,7 @@ Supervised Diffusion Maps [SDM] is a novel approach that transforms the well-kno
 unsupervised dimension reduction algorithm, Diffusion Maps, into a supervised learning tool.
 
 More details can be found in
-`our paper on ArXiv <https://arxiv.org/******>`_:
+`our paper on xxx <https://arxiv.org/******>`_:
 
 Mendelman, H, Talmon, R, *add paper name here*
 
