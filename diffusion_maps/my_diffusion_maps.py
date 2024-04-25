@@ -1,6 +1,5 @@
 import numpy as np
 from scipy.spatial.distance import cdist
-from scipy.stats import kstest
 from scipy.linalg import eigh
 
 class MyDiffusionMaps:
