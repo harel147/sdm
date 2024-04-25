@@ -31,6 +31,7 @@ See examples for using SDM for regression and classification datasets in `regres
 In general, SDM has identical API to the well known sklearn transformers API:
 
 .. code:: python
+
     ...
     best_t = 0.43  # selected using leave-1-out on the training set
     model = SDM(n_components=n_components, labels_type='classification')
