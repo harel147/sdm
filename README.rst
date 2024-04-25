@@ -57,9 +57,3 @@ KNN on the embeddings obtained from each dimension reduction algorithm:
 
 .. image:: images/Ionosphere_results.png
     :alt: Ionosphere_results
-
--------
-License
--------
-The sdm package is 3-clause BSD licensed (to do).
-
