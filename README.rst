@@ -25,8 +25,8 @@ You can install all the required packages by executing the following command:
 How to use SDM
 ---------------
 
-Check out the examples for using SDM with regression and classification datasets in `regression_example.py` and
-`classification_example.py`.
+Check out the examples for using SDM with regression and classification datasets in ``regression_example.py`` and
+``classification_example.py``.
 
 In general, SDM's API is similar to the well-known sklearn transformers API:
 
