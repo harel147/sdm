@@ -15,6 +15,7 @@ Mendelman, H, Talmon, R, *add paper name here*
 Installing
 ----------
 You can install all necessary packages by running the following command:
+
 .. code:: bash
 
     pip install -r requirements_python_3_08.txt
