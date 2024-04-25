@@ -28,13 +28,15 @@ How to use SDM
 See examples for using SDM for regression and classification datasets in `regression_example.py` and
 `classification_example.py`.
 
-In general, SDM has identical API to the well known sklearn transformers API:
+In general, SDM has similar API to the well known sklearn transformers API:
 
 .. code:: python
 
-    ...
+    train_data, test_data, train_labels, test_labels = ...
     best_t = 0.43  # selected using leave-1-out on the training set
-    model = SDM(n_components=n_components, labels_type='classification')
+    n_components = 2
+    labels_type = 'regression'  # or 'classification'
+    model = SDM(n_components=n_components, labels_type=labels_type)
     sdm_train_embeddings = model.fit_transform(train_data, train_labels, t=best_t)
     sdm_test_embeddings = model.transform(test_data, t=best_t)
 
