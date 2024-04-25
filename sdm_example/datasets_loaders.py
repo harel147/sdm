@@ -5,7 +5,6 @@ from sklearn.model_selection import train_test_split
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import LabelEncoder
 from ucimlrepo import fetch_ucirepo
-from sklearn.datasets import load_iris
 
 
 def fetch_dataset_UCI_ML_Repository_handle_server_exception(dataset_id):
@@ -49,15 +48,6 @@ def load_yacht_dataset(random_state=0):
 
     return train, test, train_labels, test_labels
 
-
-def load_iris_dataset(random_state=0):
-    iris_data = load_iris()
-    X = iris_data.data
-    y = iris_data.target
-
-    train, test, train_labels, test_labels = split_and_force_2_samples_for_class_and_nan_policy(random_state, X, y, dataset_type='classification')
-
-    return train, test, train_labels, test_labels
 
 def load_ionosphere(random_state=0):
     # fetch dataset

@@ -9,26 +9,32 @@ unsupervised dimension reduction algorithm, Diffusion Maps, into a supervised le
 The details for the underlying mathematics can be found in
 `our paper on ArXiv <https://arxiv.org/******>`_:
 
+Mendelman, H, Talmon, R, *add paper name here*
+
 ----------
 Installing
 ----------
+You can install all necessary packages by running the following command:
+.. code:: bash
+
+    pip install -r requirements_python_3_08.txt
 
 
 ---------------
 How to use SDM
 ---------------
 
-The umap package inherits from sklearn classes, and thus drops in neatly
-next to other sklearn transformers with an identical calling API.
+See examples for using SDM for regression and classification datasets in `regression_example.py` and
+`classification_example.py`.
+
+In general, SDM has identical API to the well known sklearn transformers API:
 
 .. code:: python
-
-    import umap
-    from sklearn.datasets import load_digits
-
-    digits = load_digits()
-
-    embedding = umap.UMAP().fit_transform(digits.data)
+    ...
+    best_t = 0.43  # selected using leave-1-out on the training set
+    model = SDM(n_components=n_components, labels_type='classification')
+    sdm_train_embeddings = model.fit_transform(train_data, train_labels, t=best_t)
+    sdm_test_embeddings = model.transform(test_data, t=best_t)
 
 ------------------------
 Performance and Examples

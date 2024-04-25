@@ -1,2 +1,0 @@
-# sdm
-Supervised Diffusion Maps
