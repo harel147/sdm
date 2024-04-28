@@ -36,7 +36,7 @@ class SDM:
             discrete_labels_distance = SDM.generate_discrete_labels_distance(classes_mean_distances)
             self.labels_dist_metric = discrete_labels_distance
 
-    def fit_transform(self, train_data, train_labels, t=0.5, prior_strategy='zeros'):
+    def fit_transform(self, train_data, train_labels, t=0.5):
         self.fit(train_data, train_labels)
 
         dm_train_data = MyDiffusionMaps(eps=self.data_eps)
@@ -45,13 +45,15 @@ class SDM:
         for i in range(len(self.train_labels)):
             train_labels_with_prior = np.copy(self.train_labels).astype(np.float64)
             if self.labels_type == 'classification':
+                # we use -1 to mark the unlabeled sample, this is used
                 train_labels_with_prior[i] = np.array([-1]).reshape(-1, 1)
             else:
-                train_labels_with_prior[i] = self.train_labels.mean().reshape(-1, 1)
+                # this doesn't matter as distances for prior label are set to infinity later inside compute_kernel.
+                train_labels_with_prior[i] = 0
             prior_index = i
             dm_train_labels_with_prior = MyDiffusionMaps(eps=self.labels_eps)
             dm_train_labels_with_prior.compute_kernel(train_labels_with_prior, metric=self.labels_dist_metric,
-                                                      prior_index=prior_index, prior_strategy=prior_strategy)
+                                                      prior_index=prior_index)
 
             if self.direction == 'labels_to_data':
                 start_kernel = dm_train_labels_with_prior.K_norm2
@@ -76,7 +78,7 @@ class SDM:
         self.embedding_ = along_path_embeddings
         return along_path_embeddings
 
-    def transform(self, test_data, t=0.5, prior_strategy='zeros'):
+    def transform(self, test_data, t=0.5):
         if self.train_data is None:
             raise RuntimeError(f"You must use fit or fit_transform before using transform")
 
@@ -88,7 +90,7 @@ class SDM:
         prior_index = len(train_labels_with_prior) - 1
         dm_train_labels_with_prior = MyDiffusionMaps(eps=self.labels_eps)
         dm_train_labels_with_prior.compute_kernel(train_labels_with_prior, metric=self.labels_dist_metric,
-                                                  prior_index=prior_index, prior_strategy=prior_strategy)
+                                                  prior_index=prior_index)
         along_path_embeddings = []
         for i in range(test_data.shape[0]):
             train_data_with_unseen_sample = np.append(self.train_data, test_data[i].reshape(1, -1), axis=0)
@@ -137,12 +139,9 @@ class SDM:
     @staticmethod
     def generate_discrete_labels_distance(classes_mean_distances):
         def discrete_labels_distance(label1, label2):
-            if label1 == -1 and label2 == -1:
-                return np.mean(classes_mean_distances)
-            elif label1 == -1:
-                return np.mean(classes_mean_distances[:, int(label2[0])])
-            elif label2 == -1:
-                return np.mean(classes_mean_distances[int(label1[0]), :])
+            if label1 == -1 or label2 == -1:
+                # this doesn't matter as distances for prior label are set to infinity later inside compute_kernel.
+                return 0
             else:
                 return classes_mean_distances[int(label1[0]), int(label2[0])]
 

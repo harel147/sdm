@@ -12,19 +12,15 @@ class MyDiffusionMaps:
         self.sorted_eigenvectors = None
         self.weighted_vectors = None
 
-    def compute_kernel(self, data, metric='euclidean', prior_index=None, prior_strategy='zeros'):
+    def compute_kernel(self, data, metric='euclidean', prior_index=None):
         # affinity matrix W
         distances = cdist(data, data, metric=metric)
         W = np.exp(-((distances ** 2) / self.eps))
         if prior_index is not None:
-            if prior_strategy == 'zeros':
-                W[prior_index, :] = 0
-                W[:, prior_index] = 0
-                W[prior_index, prior_index] = 1
-            elif prior_strategy == 'const':
-                const = 0.1
-                W[prior_index, :] = const
-                W[:, prior_index] = const
+            # set distances to infinity for prior "guess" for unlabeled sample
+            W[prior_index, :] = 0
+            W[:, prior_index] = 0
+            W[prior_index, prior_index] = 1
 
         # diagonal normalization matrix Q
         row_sums = np.sum(W, axis=1)
