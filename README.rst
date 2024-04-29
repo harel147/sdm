@@ -43,6 +43,11 @@ In general, SDM's API is similar to the well-known sklearn transformers API:
 ------------------------
 Examples
 ------------------------
+Visualizations of two-dimensional data from the `Yacht Hydrodynamics dataset (continuous labels) <https://archive.ics.uci.edu/dataset/243/yacht+hydrodynamics>`_:
+
+.. image:: images/Yacht_vizs.png
+    :alt: Yacht_vizs_results
+
 Regression results for the
 `Yacht Hydrodynamics dataset <https://archive.ics.uci.edu/dataset/243/yacht+hydrodynamics>`_: Normalized Mean
 Squared Error (NMSE) after training a KNN Regressor on the embeddings obtained from each
