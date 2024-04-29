@@ -43,7 +43,7 @@ In general, SDM's API is similar to the well-known sklearn transformers API:
 ------------------------
 Examples
 ------------------------
-Visualizations of two-dimensional data from the `Yacht Hydrodynamics dataset (continuous labels) <https://archive.ics.uci.edu/dataset/243/yacht+hydrodynamics>`_:
+Visualizations of two-dimensional data from the `Yacht Hydrodynamics dataset <https://archive.ics.uci.edu/dataset/243/yacht+hydrodynamics>`_ (continuous labels):
 
 .. image:: images/Yacht_vizs.png
     :alt: Yacht_vizs_results
