@@ -9,7 +9,7 @@ unsupervised dimension reduction algorithm, Diffusion Maps, into a supervised le
 More details can be found in
 `our paper on xxx <https://arxiv.org/******>`_:
 
-Mendelman, H, Talmon, R, *add paper name here*
+First author, second author, *add paper name here*
 
 ----------
 Installing
