@@ -4,11 +4,10 @@ from diffusion_maps.my_diffusion_maps import MyDiffusionMaps
 
 
 class SDM:
-    def __init__(self, n_components=30, labels_type='regression', direction='labels_to_data', data_eps='auto', labels_eps='auto',
-                 data_dist_metric='euclidean', labels_dist_metric='euclidean'):
+    def __init__(self, n_components=30, labels_type='regression', data_eps='auto', labels_eps='auto',
+                 data_dist_metric='euclidean', labels_dist_metric='euclidean', setting=None):
         self.n_components = n_components
         self.labels_type = labels_type
-        self.direction = direction
         self.data_eps = data_eps
         self.labels_eps = labels_eps
         self.data_dist_metric = data_dist_metric
@@ -17,9 +16,12 @@ class SDM:
         self.test_data = None
         self.train_labels = None
         self.test_labels = None
-        self.embedding_ = None
+        self.setting = setting
 
-    def fit(self, train_data, train_labels):
+        if self.setting != 'supervised' and self.setting != 'semi-supervised':
+            raise RuntimeError(f"setting must be set to 'supervised' or 'semi-supervised'")
+
+    def preprocess(self, train_data, train_labels):
         self.train_data = train_data
         self.train_labels = train_labels
 
@@ -36,12 +38,13 @@ class SDM:
             discrete_labels_distance = SDM.generate_discrete_labels_distance(classes_mean_distances)
             self.labels_dist_metric = discrete_labels_distance
 
-    def fit_transform(self, train_data, train_labels, t=0.5):
-        self.fit(train_data, train_labels)
+    def fit_transform_supervised(self, train_data, train_labels, t=0.5):
+        self.preprocess(train_data, train_labels)
 
         dm_train_data = MyDiffusionMaps(eps=self.data_eps)
         dm_train_data.compute_kernel(self.train_data)
         along_path_embeddings = []
+
         for i in range(len(self.train_labels)):
             train_labels_with_prior = np.copy(self.train_labels).astype(np.float64)
             if self.labels_type == 'classification':
@@ -53,16 +56,15 @@ class SDM:
             prior_index = i
             dm_train_labels_with_prior = MyDiffusionMaps(eps=self.labels_eps)
             dm_train_labels_with_prior.compute_kernel(train_labels_with_prior, metric=self.labels_dist_metric,
-                                                      prior_index=prior_index)
+                                                      prior_index=prior_index, prior_type='single')
 
-            if self.direction == 'labels_to_data':
-                start_kernel = dm_train_labels_with_prior.K_norm2
-                end_kernel = dm_train_data.K_norm2
-            else:
-                start_kernel = dm_train_data.K_norm2
-                end_kernel = dm_train_labels_with_prior.K_norm2
+            start_kernel = dm_train_labels_with_prior.K_norm2
+            end_kernel = dm_train_data.K_norm2
 
-            along_path_kernel = SDM.compute_kernel_along_path_for_t(start_kernel, end_kernel, t=t)
+            U1, s1, Vt1 = np.linalg.svd(start_kernel)
+            U2, s2, Vt2 = np.linalg.svd(end_kernel)
+
+            along_path_kernel = SDM.compute_kernel_along_path_for_t(U1, s1, Vt1, U2, s2, Vt2, t=t)
 
             dm_along_path = MyDiffusionMaps(K_norm2=along_path_kernel)
             dm_along_path.calculate_kernel_eigen()
@@ -75,36 +77,30 @@ class SDM:
                 print(f"done {round(i / len(self.train_labels), 2) * 100}% generating embeddings to trainset for t={t}")
 
         along_path_embeddings = np.array(along_path_embeddings)
-        self.embedding_ = along_path_embeddings
         return along_path_embeddings
 
-    def transform(self, test_data, t=0.5):
+    def transform_supervised(self, test_data, t=0.5):
         if self.train_data is None:
             raise RuntimeError(f"You must use fit or fit_transform before using transform")
 
-        if self.labels_type == 'classification':
-            train_labels_with_prior = np.append(self.train_labels, np.array([-1]).reshape(-1, 1), axis=0)
-        else:
-            train_labels_with_prior = np.append(self.train_labels, self.train_labels.mean().reshape(-1, 1),
-                                                axis=0)
+        train_labels_with_prior = np.append(self.train_labels, np.array([-1]).reshape(-1, 1), axis=0)
         prior_index = len(train_labels_with_prior) - 1
         dm_train_labels_with_prior = MyDiffusionMaps(eps=self.labels_eps)
         dm_train_labels_with_prior.compute_kernel(train_labels_with_prior, metric=self.labels_dist_metric,
-                                                  prior_index=prior_index)
+                                                  prior_index=prior_index, prior_type='single')
         along_path_embeddings = []
         for i in range(test_data.shape[0]):
             train_data_with_unseen_sample = np.append(self.train_data, test_data[i].reshape(1, -1), axis=0)
             dm_train_data = MyDiffusionMaps(eps=self.data_eps)
             dm_train_data.compute_kernel(train_data_with_unseen_sample)
 
-            if self.direction == 'labels_to_data':
-                start_kernel = dm_train_labels_with_prior.K_norm2
-                end_kernel = dm_train_data.K_norm2
-            else:
-                start_kernel = dm_train_data.K_norm2
-                end_kernel = dm_train_labels_with_prior.K_norm2
+            start_kernel = dm_train_labels_with_prior.K_norm2
+            end_kernel = dm_train_data.K_norm2
 
-            along_path_kernel = self.compute_kernel_along_path_for_t(start_kernel, end_kernel, t=t)
+            U1, s1, Vt1 = np.linalg.svd(start_kernel)
+            U2, s2, Vt2 = np.linalg.svd(end_kernel)
+
+            along_path_kernel = self.compute_kernel_along_path_for_t(U1, s1, Vt1, U2, s2, Vt2, t=t)
             dm_along_path = MyDiffusionMaps(K_norm2=along_path_kernel)
             dm_along_path.calculate_kernel_eigen()
             dm_along_path.calculate_weighted_vectors()
@@ -119,6 +115,68 @@ class SDM:
         along_path_embeddings = np.array(along_path_embeddings)
         return along_path_embeddings
 
+    def fit_transform_semi_supervised(self, train_data, train_labels, test_data, t=0.5):
+        self.preprocess(train_data, train_labels)
+
+        array_of_minus_ones = np.ones((len(test_data), 1)) * -1
+        train_labels_with_prior = np.vstack((self.train_labels, array_of_minus_ones))
+        prior_index = len(self.train_labels)
+        dm_train_labels_with_prior = MyDiffusionMaps(eps=self.labels_eps)
+        dm_train_labels_with_prior.compute_kernel(train_labels_with_prior, metric=self.labels_dist_metric,
+                                                  prior_index=prior_index, prior_type='batch')
+
+        train_data_with_unseen_sample = np.vstack((self.train_data, test_data))
+        dm_train_data = MyDiffusionMaps(eps=self.data_eps)
+        dm_train_data.compute_kernel(train_data_with_unseen_sample)
+
+        start_kernel = dm_train_labels_with_prior.K_norm2
+        end_kernel = dm_train_data.K_norm2
+        U1, s1, Vt1 = np.linalg.svd(start_kernel)
+        U2, _, Vt2 = np.linalg.svd(end_kernel)
+
+        # SVD shrinkage-based denoising tactic to the data kernel
+        sigma = np.linspace(-5, 5, start_kernel.shape[0])  # Spread the range to make the sigmoid gradual
+        sigma = 1 / (1 + np.exp(sigma))  # Sigmoid function
+        sigma = (sigma - sigma.min()) / (sigma.max() - sigma.min())
+        s2 = sigma
+
+        along_path_kernel = SDM.compute_kernel_along_path_for_t(U1, s1, Vt1, U2, s2, Vt2, t=t)
+
+        dm_along_path = MyDiffusionMaps(K_norm2=along_path_kernel)
+        dm_along_path.calculate_kernel_eigen()
+        dm_along_path.calculate_weighted_vectors()
+
+        along_path_embeddings = dm_along_path.project_to_low_dimensions(train_data_with_unseen_sample,
+                                                                        out_dims=self.n_components)
+        along_path_embeddings_train = along_path_embeddings[:len(self.train_labels), :]
+        along_path_embeddings_test = along_path_embeddings[len(self.train_labels):, :]
+
+        return along_path_embeddings_train, along_path_embeddings_test
+
+    def fit(self, train_data, train_labels):
+        if self.setting != 'supervised':
+            print("fit() only support 'supervised' setting")
+
+        self.preprocess(train_data, train_labels)
+
+    def transform(self, test_data, t=0.5):
+        if self.setting != 'supervised':
+            print("transform() only support 'supervised' setting")
+
+        embeddings_test = self.transform_supervised(test_data, t)
+        return embeddings_test
+
+    def fit_transform(self, train_data, train_labels, test_data=None, t=0.5):
+        if self.setting == 'supervised':
+            if test_data is not None:
+                raise RuntimeError(f"fit_transform() don't accept test_data in the 'supervised' setting")
+            embeddings_train = self.fit_transform_supervised(train_data, train_labels, t)
+            return embeddings_train
+        elif self.setting == 'semi-supervised':
+            if test_data is None:
+                raise RuntimeError(f"fit_transform() have to get test_data in the 'semi-supervised' setting")
+            embeddings_train, embeddings_test = self.fit_transform_semi_supervised(train_data, train_labels, test_data, t)
+            return embeddings_train, embeddings_test
 
     @staticmethod
     def calculate_data_distances_for_metric(X_train, y_train, num_classes, force_zero_for_same_class=True,
@@ -148,30 +206,14 @@ class SDM:
         return discrete_labels_distance
 
     @staticmethod
-    def compute_kernel_along_path_for_t(kernel1, kernel2, t):
-        # kernel1_sqrt = sqrtm(kernel1)
-        U, sigma, Vt = np.linalg.svd(kernel1)
-        sqrt_sigma = np.sqrt(sigma)
-        Sigma_sqrt = np.diag(sqrt_sigma)
-        kernel1_sqrt = U @ Sigma_sqrt @ Vt
+    def compute_kernel_along_path_for_t(U1, s1, Vt1, U2, s2, Vt2, t):
+        sigma_raise = np.diag(s1 ** (1 - t))
+        kernel1_reconstruct_and_raised = U1 @ sigma_raise @ Vt1
 
-        if np.iscomplex(kernel1_sqrt).any():
-            raise RuntimeError(f"complex numbers in kernel1_sqrt, smaller eps might solve it")
-        kernel1_sqrt_inv = np.linalg.inv(kernel1_sqrt)
+        sigma_raise = np.diag(s2 ** (t))
+        kernel2_reconstruct_and_raised = U2 @ sigma_raise @ Vt2
 
-        # fractional matrix power by t using svd
-        to_raise = kernel1_sqrt_inv @ kernel2 @ kernel1_sqrt_inv
-        U, Sigma, Vt = np.linalg.svd(to_raise)
-        Sigma_t = np.diag(Sigma ** t)
-        raised_by_t = U @ Sigma_t @ Vt
-        chosen_kernel = kernel1_sqrt @ raised_by_t @ kernel1_sqrt
+        to_raise = (kernel1_reconstruct_and_raised @ kernel2_reconstruct_and_raised)  # asymmetric but same components
 
-        # chosen_kernel = kernel1_sqrt @ (
-        #     fractional_matrix_power(kernel1_sqrt_inv @ kernel2 @ kernel1_sqrt_inv, t)) @ kernel1_sqrt
-
-        if np.iscomplex(chosen_kernel).any():
-            raise RuntimeError(f"complex numbers in chosen_kernel. i saw that it happen when the combination of the "
-                               f"two kernels eps was not good. you probably want to make one of the eps bigger.")
-
-        return chosen_kernel
+        return to_raise
 

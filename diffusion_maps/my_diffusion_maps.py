@@ -1,6 +1,6 @@
 import numpy as np
-from scipy.spatial.distance import cdist
-from scipy.linalg import eigh
+from scipy.spatial.distance import cdist, pdist, squareform
+from scipy.linalg import eigh, eig
 
 class MyDiffusionMaps:
     def __init__(self, eps=10, t=1, K_norm2=None):
@@ -12,15 +12,19 @@ class MyDiffusionMaps:
         self.sorted_eigenvectors = None
         self.weighted_vectors = None
 
-    def compute_kernel(self, data, metric='euclidean', prior_index=None):
+    def compute_kernel(self, data, metric='euclidean', prior_index=None, prior_type=None):
         # affinity matrix W
-        distances = cdist(data, data, metric=metric)
+        distances = squareform(pdist(data, metric=metric))
         W = np.exp(-((distances ** 2) / self.eps))
         if prior_index is not None:
-            # set distances to infinity for prior "guess" for unlabeled sample
-            W[prior_index, :] = 0
-            W[:, prior_index] = 0
-            W[prior_index, prior_index] = 1
+            if prior_type == 'batch':
+                W[prior_index:] = 0
+                W[:, prior_index:] = 0
+                np.fill_diagonal(W[prior_index:, prior_index:], 1)
+            elif prior_type == 'single':  # can be in the middle of the kernel, not neceserly in the end
+                W[prior_index, :] = 0
+                W[:, prior_index] = 0
+                W[prior_index, prior_index] = 1
 
         # diagonal normalization matrix Q
         row_sums = np.sum(W, axis=1)
@@ -38,11 +42,6 @@ class MyDiffusionMaps:
         # second normalized kernel
         self.K_norm2 = Q2 @ K_norm1 @ Q2
 
-        U, S, Vt = np.linalg.svd(self.K_norm2)
-        sorted_eigenvalues = np.sort(S ** 2)[::-1]
-        if sorted_eigenvalues[2] >= 1:
-            raise RuntimeError(f"third largest eigenvalue shouldn't be 1. you probably need to choose a bigger eps.")
-
         # this is a possible solution to enforce not too small eigenvalues
         U, S, Vt = np.linalg.svd(self.K_norm2)
         S[S < 1e-4] = 1e-4
@@ -56,11 +55,19 @@ class MyDiffusionMaps:
         if self.K_norm2 is None:
             raise RuntimeError(f"can't compute eigen if K_norm2 hasn't been computed before")
         # calculate the second normalized kernel eigenvalues and eigenvectors
+        # This is for symmetric kernel
         # eigenvalues, eigenvectors = eigh(self.K_norm2)
         # indices = np.argsort(eigenvalues)[::-1]
         # self.sorted_eigenvalues = eigenvalues[indices]
         # self.sorted_eigenvectors = eigenvectors[:, indices].T
 
+        # This is for non-symmetric kernel, left eigenvectors
+        # eigenvalues, eigenvectors = eig(self.K_norm2.T)  # Transpose the kernel to get the left eigenvectors
+        # indices = np.argsort(eigenvalues)[::-1]
+        # self.sorted_eigenvalues = eigenvalues[indices]
+        # self.sorted_eigenvectors = eigenvectors[:, indices].T
+
+        # In practice, we use SVD instead of EVD as it achieves similar results and is faster and more stable
         U, S, Vt = np.linalg.svd(self.K_norm2)
         eigenvalues = S ** 2
         eigenvectors = U
@@ -111,7 +118,7 @@ class MyDiffusionMaps:
 
     @staticmethod
     def auto_select_aps(data, metric='euclidean'):
-        distances = cdist(data, data, metric=metric)
+        distances = squareform(pdist(data, metric=metric))
         possible_eps = [10**i for i in range(-5, 11)]
         eps_candidates_count = {}
         eps_candidates_eigenvalues = {}
@@ -155,12 +162,3 @@ class MyDiffusionMaps:
         best_eps = np.median(best_count_eps)
         print(f"selected eps: {best_eps}")
         return best_eps
-
-
-
-
-
-
-
-
-
