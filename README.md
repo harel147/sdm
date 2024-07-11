@@ -5,7 +5,7 @@ unsupervised dimension reduction algorithm, Diffusion Maps, into a supervised an
 
 More details can be found in our paper [Label-Driven Diffusion: Supervised and Semi-supervised Diffusion Maps](https://arxiv.org/******)
 
-*Harel Mendelman*, *Ronen Talmon*
+*first author*, *second author*
 
 ## Installing
 You can install all the required packages by executing the following command:
