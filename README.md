@@ -12,12 +12,12 @@ You can install all the required packages by executing the following command:
 
 ```bash
 pip install -r requirements_python_3_08.txt
-
+```
 
 ## How to use SDM
-Check out the examples for using SDM with regression and classification datasets in ``supervised_regression_example.py`` and
-``supervised_classification_example.py`` for the supervised setting, and ``semi_supervised_regression_example.py`` and
-``semi_supervised_classification_example.py`` for the semi-supervised setting.
+Check out the examples for using SDM with regression and classification datasets in `supervised_regression_example.py` and
+`supervised_classification_example.py` for the supervised setting, and `semi_supervised_regression_example.py` and
+`semi_supervised_classification_example.py` for the semi-supervised setting.
 
 In general, SDM's API is similar to the well-known sklearn transformers API. For the supervised setting:
 
