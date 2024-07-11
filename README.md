@@ -1,29 +1,20 @@
-====
-SDM
-====
+# SDM
 
 SDM is a novel approach that transforms the well-known
 unsupervised dimension reduction algorithm, Diffusion Maps, into a supervised and semi-supervised learning tool.
 
-More details can be found in
-`our paper on xxx <https://arxiv.org/******>`_:
+More details can be found in [our paper on xxx](https://arxiv.org/******):
 
 First author, second author, *add paper name here*
 
-----------
-Installing
-----------
+## Installing
 You can install all the required packages by executing the following command:
 
-.. code:: bash
+```bash
+pip install -r requirements_python_3_08.txt
 
-    pip install -r requirements_python_3_08.txt
 
-
----------------
-How to use SDM
----------------
-
+## How to use SDM
 Check out the examples for using SDM with regression and classification datasets in ``supervised_regression_example.py`` and
 ``supervised_classification_example.py`` for the supervised setting, and ``semi_supervised_regression_example.py`` and
 ``semi_supervised_classification_example.py`` for the semi-supervised setting.
