@@ -43,21 +43,18 @@ sdm_train_embeddings, sdm_test_embeddings = model.fit_transform(train_data, trai
 ```
 
 ## Examples
-Visualizations of two-dimensional data from the `Yacht Hydrodynamics dataset <https://archive.ics.uci.edu/dataset/243/yacht+hydrodynamics>`_ (continuous labels):
+Visualizations of two-dimensional data from the [Yacht Hydrodynamics dataset](https://archive.ics.uci.edu/dataset/243/yacht+hydrodynamics) (continuous labels):
 
-.. image:: images/Yacht_vizs.png
-    :alt: Yacht_vizs_results
+![Yacht_vizs](https://github.com/harel147/sdm/assets/63463677/1271d5e4-802d-4bfb-9f4f-771ee9675f15)
 
 Supervised setting: Classification results for the
-`Ionosphere dataset <https://archive.ics.uci.edu/dataset/52/ionosphere>`_: Misclassification Rate after training a
+[Ionosphere dataset](https://archive.ics.uci.edu/dataset/52/ionosphere): Misclassification Rate after training a
 KNN on the embeddings obtained from each dimension reduction algorithm:
 
-.. image:: images/Ionosphere_results.png
-    :alt: Ionosphere_results
+![Ionosphere_results](https://github.com/harel147/sdm/assets/63463677/df1092d5-2994-4b6c-bcb1-7640b9b7d4f8)
 
 Semi-supervised setting: Classification results for the
-`Vehicle Silhouettes dataset <https://archive.ics.uci.edu/dataset/149/statlog+vehicle+silhouettes>`_: Misclassification Rate after training a
+[Vehicle Silhouettes dataset](https://archive.ics.uci.edu/dataset/149/statlog+vehicle+silhouettes): Misclassification Rate after training a
 KNN on the embeddings obtained from each dimension reduction algorithm:
 
-.. image:: images/Silhouettes_results.png
-    :alt: Silhouettes_results
+![Silhouettes_results](https://github.com/harel147/sdm/assets/63463677/bd4f4aee-70a8-4307-b74b-40857a3ac9cf)
