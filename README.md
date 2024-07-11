@@ -21,30 +21,28 @@ Check out the examples for using SDM with regression and classification datasets
 
 In general, SDM's API is similar to the well-known sklearn transformers API. For the supervised setting:
 
-.. code:: python
-
-    train_data, test_data, train_labels, test_labels = ...
-    selected_t = 0.03  # in (0, 1)
-    n_components = 2
-    labels_type = 'regression'  # or 'classification'
-    model = SDM(n_components=n_components, labels_type=labels_type, setting='supervised')
-    sdm_train_embeddings = model.fit_transform(train_data, train_labels, t=selected_t)
-    sdm_test_embeddings = model.transform(test_data, t=selected_t)
+```python
+train_data, test_data, train_labels, test_labels = ...
+selected_t = 0.03  # in (0, 1)
+n_components = 2
+labels_type = 'regression'  # or 'classification'
+model = SDM(n_components=n_components, labels_type=labels_type, setting='supervised')
+sdm_train_embeddings = model.fit_transform(train_data, train_labels, t=selected_t)
+sdm_test_embeddings = model.transform(test_data, t=selected_t)
+```
 
 For the semi-supervised setting:
 
-.. code:: python
+```python
+train_data, test_data, train_labels, test_labels = ...
+selected_t = 0.93  # in (0, 1)
+n_components = 2
+labels_type = 'regression'  # or 'classification'
+model = SDM(n_components=n_components, labels_type=labels_type, setting='semi-supervised')
+sdm_train_embeddings, sdm_test_embeddings = model.fit_transform(train_data, train_labels, test_data, t=selected_t)
+```
 
-    train_data, test_data, train_labels, test_labels = ...
-    selected_t = 0.93  # in (0, 1)
-    n_components = 2
-    labels_type = 'regression'  # or 'classification'
-    model = SDM(n_components=n_components, labels_type=labels_type, setting='semi-supervised')
-    sdm_train_embeddings, sdm_test_embeddings = model.fit_transform(train_data, train_labels, test_data, t=selected_t)
-
-------------------------
-Examples
-------------------------
+## Examples
 Visualizations of two-dimensional data from the `Yacht Hydrodynamics dataset <https://archive.ics.uci.edu/dataset/243/yacht+hydrodynamics>`_ (continuous labels):
 
 .. image:: images/Yacht_vizs.png
