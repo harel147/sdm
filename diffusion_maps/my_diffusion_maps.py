@@ -159,6 +159,8 @@ class MyDiffusionMaps:
         if len(best_count_eps) == 0:
             raise RuntimeError(f"Failed to select eps automatically.")
 
-        best_eps = np.median(best_count_eps)
+        if len(best_count_eps) > 1:
+            print("more than 1 eps found, we take the smaller eps.")
+        best_eps = np.min(best_count_eps)
         print(f"selected eps: {best_eps}")
         return best_eps
