@@ -25,11 +25,6 @@ class SDM:
         self.train_data = train_data
         self.train_labels = train_labels
 
-        if self.data_eps == 'auto':
-            self.data_eps = MyDiffusionMaps.auto_select_aps(train_data)
-        if self.labels_eps == 'auto':
-            self.labels_eps = MyDiffusionMaps.auto_select_aps(train_labels)
-
         if self.labels_type == 'classification':
             num_classes = len(np.unique(train_labels))
             # You need to copy classes_mean_distances manually to create discrete_labels_distance metric
@@ -37,6 +32,11 @@ class SDM:
             # generate the distance metric function dynamically based on computed classes_mean_distances for this fold
             discrete_labels_distance = SDM.generate_discrete_labels_distance(classes_mean_distances)
             self.labels_dist_metric = discrete_labels_distance
+
+        if self.data_eps == 'auto':
+            self.data_eps = MyDiffusionMaps.auto_select_aps(train_data, self.data_dist_metric)
+        if self.labels_eps == 'auto':
+            self.labels_eps = MyDiffusionMaps.auto_select_aps(train_labels, self.labels_dist_metric)
 
     def fit_transform_supervised(self, train_data, train_labels, t=0.5):
         self.preprocess(train_data, train_labels)
@@ -181,6 +181,9 @@ class SDM:
     @staticmethod
     def calculate_data_distances_for_metric(X_train, y_train, num_classes, force_zero_for_same_class=True,
                                             data_metric='euclidean'):
+
+        X_train, y_train = X_train[:2000], y_train[:2000]  # if train is too big this takes too much time, 2000 samples is enough.
+
         y_train = y_train.flatten()
         classes_data = [X_train[y_train == i] for i in range(num_classes)]
         classes_mean_distances = np.zeros((num_classes, num_classes))

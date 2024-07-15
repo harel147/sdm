@@ -2,7 +2,7 @@ from sklearn.neighbors import KNeighborsRegressor
 
 from supervised_diffusion_maps.sdm import SDM
 from sdm_example.datasets_loaders import load_yacht_dataset
-from sdm_example.tools import plot_2d_visualization, normalized_mse
+from sdm_example.tools import plot_2d_visualization, normalized_mse, scale_data
 
 
 def main():
@@ -17,9 +17,10 @@ def main():
     model = SDM(n_components=n_components, labels_type='regression', setting='semi-supervised')
     sdm_train_embeddings, sdm_test_embeddings = model.fit_transform(train_data, train_labels, test_data, t=selected_t)
 
+    X_train, X_test = scale_data(sdm_train_embeddings, sdm_test_embeddings)
     model = KNeighborsRegressor(n_neighbors=5)
-    model.fit(sdm_train_embeddings, train_labels.flatten())
-    y_pred = model.predict(sdm_test_embeddings)
+    model.fit(X_train, train_labels.flatten())
+    y_pred = model.predict(X_test)
     nmse = normalized_mse(test_labels, y_pred)
     print(f"NMSE for semi-SDM using n_components={n_components} and selected t={selected_t}: {nmse}")
     plot_2d_visualization(sdm_train_embeddings, train_labels, sdm_test_embeddings, test_labels,

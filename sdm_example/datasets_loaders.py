@@ -64,3 +64,24 @@ def load_ionosphere(random_state=0):
     train, test, train_labels, test_labels = split_and_force_2_samples_for_class_and_nan_policy(random_state, X, y, dataset_type='classification')
 
     return train, test, train_labels, test_labels
+
+def load_silhouettes_dataset(random_state=0):
+    # fetch dataset
+    statlog_id = 149
+    dataset = fetch_dataset_UCI_ML_Repository_handle_server_exception(statlog_id)
+    X = dataset.data.features
+    y = dataset.data.targets
+    label_encoder = LabelEncoder()
+
+    ## REMOVE BAD SAMPLE ##
+    X = X.drop(752)
+    y = y.drop(752)
+    #######################
+
+    X = X.values
+    y = y.values.flatten()
+    y = label_encoder.fit_transform(y)
+
+    train, test, train_labels, test_labels = split_and_force_2_samples_for_class_and_nan_policy(random_state, X, y, dataset_type='classification')
+
+    return train, test, train_labels, test_labels

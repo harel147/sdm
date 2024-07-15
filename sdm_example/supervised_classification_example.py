@@ -3,7 +3,7 @@ from sklearn.metrics import accuracy_score
 
 from supervised_diffusion_maps.sdm import SDM
 from sdm_example.datasets_loaders import load_ionosphere
-from sdm_example.tools import plot_2d_visualization
+from sdm_example.tools import plot_2d_visualization, scale_data
 
 
 def main():
@@ -19,8 +19,9 @@ def main():
     sdm_train_embeddings = model.fit_transform(train_data, train_labels, t=selected_t)
     sdm_test_embeddings = model.transform(test_data, t=selected_t)
 
-    clf = KNeighborsClassifier(n_neighbors=1).fit(sdm_train_embeddings, train_labels.flatten().astype(int))
-    y_pred = clf.predict(sdm_test_embeddings)
+    X_train, X_test = scale_data(sdm_train_embeddings, sdm_test_embeddings)
+    clf = KNeighborsClassifier(n_neighbors=1).fit(X_train, train_labels.flatten().astype(int))
+    y_pred = clf.predict(X_test)
     accuracy = accuracy_score(test_labels, y_pred)
     print(f"Misclassification Rate for SDM using n_components={n_components} and selected t={selected_t}: {1-accuracy}")
     plot_2d_visualization(sdm_train_embeddings, train_labels, sdm_test_embeddings, test_labels,
