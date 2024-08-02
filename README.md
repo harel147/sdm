@@ -48,7 +48,7 @@ Visualizations of two-dimensional data from the [Yacht Hydrodynamics dataset](ht
 ![Yacht_vizs](https://github.com/harel147/sdm/assets/63463677/1271d5e4-802d-4bfb-9f4f-771ee9675f15)
 
 Supervised setting: Classification results for the
-[Ionosphere dataset](): Misclassification Rate after training a
+[Ionosphere dataset](https://archive.ics.uci.edu/dataset/52/ionosphere): Misclassification Rate after training a
 KNN on the embeddings obtained from each dimension reduction algorithm:
 
 ![Ionosphere_results](https://github.com/user-attachments/assets/c2c7b40f-325c-4bba-8ce2-0e3b424dc417)
