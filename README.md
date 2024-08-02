@@ -57,6 +57,5 @@ Semi-supervised setting: Classification results for the
 [Vehicle Silhouettes dataset](https://archive.ics.uci.edu/dataset/149/statlog+vehicle+silhouettes): Misclassification Rate after training a
 KNN on the embeddings obtained from each dimension reduction algorithm:
 
-![Silhouettes_results](https://github.com/user-attachments/assets/d43a6cf2-b42b-4c01-b249-e6c9fe4a6046)
 <img src="https://github.com/user-attachments/assets/d43a6cf2-b42b-4c01-b249-e6c9fe4a6046" alt="Silhouettes_results_resized" width="600"/>
 
