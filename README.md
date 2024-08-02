@@ -51,7 +51,7 @@ Supervised setting: Classification results for the
 [Ionosphere dataset](): Misclassification Rate after training a
 KNN on the embeddings obtained from each dimension reduction algorithm:
 
-![Ionosphere_results_resized](https://github.com/user-attachments/assets/8e34129f-8035-41ee-9b5f-9d132650a316)
+![Ionosphere_results](https://github.com/user-attachments/assets/c2c7b40f-325c-4bba-8ce2-0e3b424dc417)
 
 Semi-supervised setting: Classification results for the
 [Vehicle Silhouettes dataset](https://archive.ics.uci.edu/dataset/149/statlog+vehicle+silhouettes): Misclassification Rate after training a
