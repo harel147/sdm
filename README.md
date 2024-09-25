@@ -51,10 +51,11 @@ Supervised setting: Classification results for the
 [Ionosphere dataset](https://archive.ics.uci.edu/dataset/52/ionosphere): Misclassification Rate after training a
 KNN on the embeddings obtained from each dimension reduction algorithm:
 
-![Ionosphere_results](https://github.com/harel147/sdm/assets/63463677/df1092d5-2994-4b6c-bcb1-7640b9b7d4f8)
+<img src="https://github.com/user-attachments/assets/1a2e27e8-55ce-4382-99b6-562d2a8704ce" alt="Ionosphere_results_resized" width="600"/>
 
 Semi-supervised setting: Classification results for the
 [Vehicle Silhouettes dataset](https://archive.ics.uci.edu/dataset/149/statlog+vehicle+silhouettes): Misclassification Rate after training a
 KNN on the embeddings obtained from each dimension reduction algorithm:
 
-![Silhouettes_results](https://github.com/harel147/sdm/assets/63463677/bd4f4aee-70a8-4307-b74b-40857a3ac9cf)
+<img src="https://github.com/user-attachments/assets/d43a6cf2-b42b-4c01-b249-e6c9fe4a6046" alt="Silhouettes_results_resized" width="600"/>
+
