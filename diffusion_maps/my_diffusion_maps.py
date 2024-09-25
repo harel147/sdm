@@ -40,7 +40,7 @@ class MyDiffusionMaps:
         Q2 = np.diag(row_sums)
 
         # second normalized kernel
-        self.K_norm2 = Q2 @ K_norm1
+        self.K_norm2 = Q2 @ K_norm1  # row-stochastic
 
         # this is a possible solution to enforce not too small eigenvalues
         U, S, Vt = np.linalg.svd(self.K_norm2)
