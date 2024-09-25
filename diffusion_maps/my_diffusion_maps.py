@@ -36,11 +36,11 @@ class MyDiffusionMaps:
 
         # second diagonal normalization matrix Q2
         row_sums = np.sum(K_norm1, axis=1)
-        row_sums = row_sums ** -0.5
+        row_sums = row_sums ** -1
         Q2 = np.diag(row_sums)
 
         # second normalized kernel
-        self.K_norm2 = Q2 @ K_norm1 @ Q2
+        self.K_norm2 = Q2 @ K_norm1
 
         # this is a possible solution to enforce not too small eigenvalues
         U, S, Vt = np.linalg.svd(self.K_norm2)
