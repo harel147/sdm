@@ -44,7 +44,7 @@ sdm_train_embeddings, sdm_test_embeddings = model.fit_transform(train_data, trai
 ## Examples
 Visualizations of two-dimensional data from the [Yacht Hydrodynamics dataset](https://archive.ics.uci.edu/dataset/243/yacht+hydrodynamics) (continuous labels):
 
-![Yacht_vizs](https://github.com/harel147/sdm/assets/63463677/1271d5e4-802d-4bfb-9f4f-771ee9675f15)
+![yacht_viz](https://github.com/user-attachments/assets/8b22843e-0e1e-40f4-b38d-36b0c0db19a6)
 
 SDM (Supervised setting): Classification results for the
 [Ionosphere dataset](https://archive.ics.uci.edu/dataset/52/ionosphere): Misclassification Rate after training a
