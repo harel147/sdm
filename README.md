@@ -50,11 +50,11 @@ SDM (Supervised setting): Classification results for the
 [Ionosphere dataset](https://archive.ics.uci.edu/dataset/52/ionosphere): Misclassification Rate after training a
 KNN on the embeddings obtained from each dimension reduction algorithm:
 
-<img src="https://github.com/user-attachments/assets/1a2e27e8-55ce-4382-99b6-562d2a8704ce" alt="Ionosphere_results_resized" width="600"/>
+<img src="https://github.com/user-attachments/assets/75fa68ff-aed9-4150-9874-73eef0412ff1" alt="Ionosphere_results_resized" width="600"/>
 
 SSDM (Semi-supervised setting): Classification results for the
 [Vehicle Silhouettes dataset](https://archive.ics.uci.edu/dataset/149/statlog+vehicle+silhouettes): Misclassification Rate after training a
 KNN on the embeddings obtained from each dimension reduction algorithm:
 
-<img src="https://github.com/user-attachments/assets/d43a6cf2-b42b-4c01-b249-e6c9fe4a6046" alt="Silhouettes_results_resized" width="600"/>
+<img src="https://github.com/user-attachments/assets/763f2b28-c0e3-48f8-98b7-a05344404f5b" alt="Silhouettes_results_resized" width="600"/>
 
