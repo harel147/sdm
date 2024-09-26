@@ -1,11 +1,10 @@
-# SDM
+# SDM and SSDM
 
-SDM is a novel approach that transforms the well-known
-unsupervised dimension reduction algorithm, Diffusion Maps, into a supervised and semi-supervised learning tool.
+Supervised Diffusion Maps (SDM) and Semi-Supervised Diffusion Maps (SSDM), transform the well-known unsupervised dimensionality reduction algorithm, Diffusion Maps, into supervised and semi-supervised learning tools.
 
 More details can be found in our paper [TODO](https://arxiv.org/******)
 
-*first author*, *second author*
+*first author (TODO)*, *second author (TODO)*
 
 ## Installing
 You can install all the required packages by executing the following command:
@@ -14,12 +13,12 @@ You can install all the required packages by executing the following command:
 pip install -r requirements_python_3_08.txt
 ```
 
-## How to use SDM
+## How to use SDM and SSDM
 Check out the examples for using SDM with regression and classification datasets in `supervised_regression_example.py` and
-`supervised_classification_example.py` for the supervised setting, and `semi_supervised_regression_example.py` and
+`supervised_classification_example.py` for the supervised setting, and SSDM in `semi_supervised_regression_example.py` and
 `semi_supervised_classification_example.py` for the semi-supervised setting.
 
-In general, SDM's API is similar to the well-known sklearn transformers API. For the supervised setting:
+In general, our API is similar to the well-known sklearn transformers API. For SDM (supervised setting):
 
 ```python
 train_data, test_data, train_labels, test_labels = ...
@@ -31,7 +30,7 @@ sdm_train_embeddings = model.fit_transform(train_data, train_labels, t=selected_
 sdm_test_embeddings = model.transform(test_data, t=selected_t)
 ```
 
-For the semi-supervised setting:
+For SSDM (semi-supervised setting):
 
 ```python
 train_data, test_data, train_labels, test_labels = ...
@@ -47,13 +46,13 @@ Visualizations of two-dimensional data from the [Yacht Hydrodynamics dataset](ht
 
 ![Yacht_vizs](https://github.com/harel147/sdm/assets/63463677/1271d5e4-802d-4bfb-9f4f-771ee9675f15)
 
-Supervised setting: Classification results for the
+SDM (Supervised setting): Classification results for the
 [Ionosphere dataset](https://archive.ics.uci.edu/dataset/52/ionosphere): Misclassification Rate after training a
 KNN on the embeddings obtained from each dimension reduction algorithm:
 
 <img src="https://github.com/user-attachments/assets/1a2e27e8-55ce-4382-99b6-562d2a8704ce" alt="Ionosphere_results_resized" width="600"/>
 
-Semi-supervised setting: Classification results for the
+SSDM (Semi-supervised setting): Classification results for the
 [Vehicle Silhouettes dataset](https://archive.ics.uci.edu/dataset/149/statlog+vehicle+silhouettes): Misclassification Rate after training a
 KNN on the embeddings obtained from each dimension reduction algorithm:
 
