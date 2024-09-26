@@ -27,9 +27,8 @@ class SDM:
 
         if self.labels_type == 'classification':
             num_classes = len(np.unique(train_labels))
-            # You need to copy classes_mean_distances manually to create discrete_labels_distance metric
             classes_mean_distances = SDM.calculate_data_distances_for_metric(train_data, train_labels, num_classes, data_metric=self.data_dist_metric)
-            # generate the distance metric function dynamically based on computed classes_mean_distances for this fold
+            # generate the distance metric function dynamically based on computed classes_mean_distances
             discrete_labels_distance = SDM.generate_discrete_labels_distance(classes_mean_distances)
             self.labels_dist_metric = discrete_labels_distance
 
@@ -201,7 +200,7 @@ class SDM:
     def generate_discrete_labels_distance(classes_mean_distances):
         def discrete_labels_distance(label1, label2):
             if label1 == -1 or label2 == -1:
-                # this doesn't matter as distances for prior label are set to infinity later inside compute_kernel.
+                # this doesn't matter as distances for prior label are set to infinity later inside the compute_kernel function.
                 return 0
             else:
                 return classes_mean_distances[int(label1[0]), int(label2[0])]
@@ -216,7 +215,7 @@ class SDM:
         sigma_raise = np.diag(s2 ** (t))
         kernel2_reconstruct_and_raised = U2 @ sigma_raise @ Vt2
 
-        to_raise = (kernel1_reconstruct_and_raised @ kernel2_reconstruct_and_raised)  # asymmetric but same components
+        result = (kernel1_reconstruct_and_raised @ kernel2_reconstruct_and_raised)
 
-        return to_raise
+        return result
 

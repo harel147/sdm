@@ -16,12 +16,12 @@ class MyDiffusionMaps:
         # affinity matrix W
         distances = squareform(pdist(data, metric=metric))
         W = np.exp(-((distances ** 2) / self.eps))
-        if prior_index is not None:
-            if prior_type == 'batch':
+        if prior_index is not None:  # for constructing the label kernel (denoted in the paper as P).
+            if prior_type == 'batch':  # SSDM
                 W[prior_index:] = 0
                 W[:, prior_index:] = 0
                 np.fill_diagonal(W[prior_index:, prior_index:], 1)
-            elif prior_type == 'single':  # can be in the middle of the kernel, not neceserly in the end
+            elif prior_type == 'single':  # SDM
                 W[prior_index, :] = 0
                 W[:, prior_index] = 0
                 W[prior_index, prior_index] = 1
