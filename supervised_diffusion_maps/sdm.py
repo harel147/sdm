@@ -46,12 +46,7 @@ class SDM:
 
         for i in range(len(self.train_labels)):
             train_labels_with_prior = np.copy(self.train_labels).astype(np.float64)
-            if self.labels_type == 'classification':
-                # we use -1 to mark the unlabeled sample, this is used
-                train_labels_with_prior[i] = np.array([-1]).reshape(-1, 1)
-            else:
-                # this doesn't matter as distances for prior label are set to infinity later inside compute_kernel.
-                train_labels_with_prior[i] = 0
+            train_labels_with_prior[i] = np.array([-1]).reshape(-1, 1)  # We use -1 to mark the unlabeled samples
             prior_index = i
             dm_train_labels_with_prior = MyDiffusionMaps(eps=self.labels_eps)
             dm_train_labels_with_prior.compute_kernel(train_labels_with_prior, metric=self.labels_dist_metric,
@@ -82,7 +77,7 @@ class SDM:
         if self.train_data is None:
             raise RuntimeError(f"You must use fit or fit_transform before using transform")
 
-        train_labels_with_prior = np.append(self.train_labels, np.array([-1]).reshape(-1, 1), axis=0)
+        train_labels_with_prior = np.append(self.train_labels, np.array([-1]).reshape(-1, 1), axis=0)  # We use -1 to mark the unlabeled samples
         prior_index = len(train_labels_with_prior) - 1
         dm_train_labels_with_prior = MyDiffusionMaps(eps=self.labels_eps)
         dm_train_labels_with_prior.compute_kernel(train_labels_with_prior, metric=self.labels_dist_metric,
@@ -118,7 +113,7 @@ class SDM:
         self.preprocess(train_data, train_labels)
 
         array_of_minus_ones = np.ones((len(test_data), 1)) * -1
-        train_labels_with_prior = np.vstack((self.train_labels, array_of_minus_ones))
+        train_labels_with_prior = np.vstack((self.train_labels, array_of_minus_ones))  # We use -1 to mark the unlabeled samples
         prior_index = len(self.train_labels)
         dm_train_labels_with_prior = MyDiffusionMaps(eps=self.labels_eps)
         dm_train_labels_with_prior.compute_kernel(train_labels_with_prior, metric=self.labels_dist_metric,
