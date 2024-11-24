@@ -5,6 +5,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import LabelEncoder
 from ucimlrepo import fetch_ucirepo
+from sklearn.datasets import fetch_openml
 
 
 def fetch_dataset_UCI_ML_Repository_handle_server_exception(dataset_id):
@@ -83,5 +84,37 @@ def load_silhouettes_dataset(random_state=0):
     y = label_encoder.fit_transform(y)
 
     train, test, train_labels, test_labels = split_and_force_2_samples_for_class_and_nan_policy(random_state, X, y, dataset_type='classification')
+
+    return train, test, train_labels, test_labels
+
+def load_mnist_dataset(random_state=0):
+    # Fetch the MNIST dataset from OpenML
+    mnist = fetch_openml('mnist_784', version=1)
+
+    X, y = mnist['data'], mnist['target']
+    X, y = np.array(X), np.array(y)
+    X = X / 255.0  # normalize
+    label_encoder = LabelEncoder()
+    y = label_encoder.fit_transform(y)
+
+    train, test, train_labels, test_labels = split_and_force_2_samples_for_class_and_nan_policy(random_state, X, y,
+                                                                                                dataset_type='classification')
+
+    return train, test, train_labels, test_labels
+
+def load_isolet_dataset(random_state=0):
+    # fetch dataset
+    isolet_id = 54
+    dataset = fetch_dataset_UCI_ML_Repository_handle_server_exception(isolet_id)
+    X = dataset.data.features
+    y = dataset.data.targets
+    label_encoder = LabelEncoder()
+
+    X = X.values
+    y = y.values.flatten()
+    y = label_encoder.fit_transform(y)
+
+    train, test, train_labels, test_labels = split_and_force_2_samples_for_class_and_nan_policy(random_state, X, y,
+                                                                                                dataset_type='classification')
 
     return train, test, train_labels, test_labels
