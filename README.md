@@ -18,6 +18,8 @@ Check out the examples for using SDM with regression and classification datasets
 `supervised_classification_example.py` for the supervised setting, and SSDM in `semi_supervised_regression_example.py` and
 `semi_supervised_classification_example.py` for the semi-supervised setting.
 
+We also provide an optimized version of SSDM for the semi-supervised setting, suitable for large datasets. In this version, we sample only 1%–10% of the labels and leverage `torch` for GPU acceleration. Examples of how to use the optimized SSDM can be found in `optimized_ssdm_classification_mnist.py` and `optimized_ssdm_classification_isolet.py`.
+
 In general, our API is similar to the well-known sklearn transformers API. For SDM (supervised setting):
 
 ```python
@@ -38,7 +40,21 @@ selected_t = 0.93  # in (0, 1)
 n_components = 2
 labels_type = 'regression'  # or 'classification'
 model = SDM(n_components=n_components, labels_type=labels_type, setting='semi-supervised')
-sdm_train_embeddings, sdm_test_embeddings = model.fit_transform(train_data, train_labels, test_data, t=selected_t)
+ssdm_train_embeddings, ssdm_test_embeddings = model.fit_transform(train_data, train_labels, test_data, t=selected_t)
+```
+
+For optimized SSDM (semi-supervised setting):
+
+```python
+train_data, test_data, train_labels, test_labels = ...
+selected_t = -1  # in (0, 1), or -1 for not using t.
+n_components = 2
+labels_type = 'classification'  # optimized SSDM currently supports only classification
+data_eps = 100
+sample_ratio = 0.01
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+model = optimized_SSDM(n_components=n_components, labels_type='classification', data_eps=data_eps, sample_ratio=sample_ratio, device=device)
+ssdm_train_embeddings, ssdm_test_embeddings = model.fit_transform(train_data, train_labels, test_data, t=selected_t)
 ```
 
 ## Examples
