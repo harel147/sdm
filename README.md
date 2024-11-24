@@ -60,17 +60,17 @@ ssdm_train_embeddings, ssdm_test_embeddings = model.fit_transform(train_data, tr
 ## Examples
 Visualizations of two-dimensional data from the [Yacht Hydrodynamics dataset](https://archive.ics.uci.edu/dataset/243/yacht+hydrodynamics) (continuous labels):
 
-![yacht_viz](https://github.com/user-attachments/assets/8b22843e-0e1e-40f4-b38d-36b0c0db19a6)
+![yacht_viz](https://github.com/user-attachments/assets/2ad44a4a-0a45-4e9f-bba8-19a163ca52d9)
 
 SDM (Supervised setting): Classification results for the
 [Ionosphere dataset](https://archive.ics.uci.edu/dataset/52/ionosphere): Misclassification Rate after training a
 KNN on the embeddings obtained from each dimension reduction algorithm:
 
-<img src="https://github.com/user-attachments/assets/75fa68ff-aed9-4150-9874-73eef0412ff1" alt="Ionosphere_results_resized" width="600"/>
+![Ionosphere_SDM_results](https://github.com/user-attachments/assets/9922426b-6b06-4741-99a7-a4b25a483507)
 
 SSDM (Semi-supervised setting): Classification results for the
 [Vehicle Silhouettes dataset](https://archive.ics.uci.edu/dataset/149/statlog+vehicle+silhouettes): Misclassification Rate after training a
 KNN on the embeddings obtained from each dimension reduction algorithm:
 
-<img src="https://github.com/user-attachments/assets/763f2b28-c0e3-48f8-98b7-a05344404f5b" alt="Silhouettes_results_resized" width="600"/>
+![Silhouettes_SSDM_results](https://github.com/user-attachments/assets/0726ba21-592e-4554-9749-7c9aea340d3c)
 
