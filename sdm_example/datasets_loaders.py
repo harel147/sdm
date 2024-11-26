@@ -49,6 +49,7 @@ def load_yacht_dataset(random_state=0):
 
     return train, test, train_labels, test_labels
 
+# this is shit
 
 def load_ionosphere(random_state=0):
     # fetch dataset
