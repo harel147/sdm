@@ -2,9 +2,9 @@
 
 Supervised Diffusion Maps (SDM) and Semi-Supervised Diffusion Maps (SSDM), transform the well-known unsupervised dimensionality reduction algorithm, Diffusion Maps, into supervised and semi-supervised learning tools.
 
-More details can be found in our paper [TODO](https://arxiv.org/******)
+For more details, see our [paper](https://openreview.net/forum?id=G3B5ReApDw), accepted to *ICLR 2025*.
 
-*first author (TODO)*, *second author (TODO)*
+*Harel Mendelman*, *Ronen Talmon*
 
 ## Installing
 You can install all the required packages by executing the following command:
